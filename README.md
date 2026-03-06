@@ -1,0 +1,76 @@
+# fetch-tor-proxy
+
+`fetch-tor-proxy` lets you perform HTTP(S) requests through a SOCKS proxy (Tor), using `node-fetch` and `socks-proxy-agent`.
+
+## Installation
+
+```bash
+npm install fetch-tor-proxy
+```
+
+## Quick Start
+
+```ts
+import { proxiedFetch } from 'fetch-tor-proxy';
+
+const response = await proxiedFetch('https://api.ipify.org?format=json');
+const body = await response.text();
+console.log(body);
+```
+
+Available alias:
+
+```ts
+import { fetch } from 'fetch-tor-proxy';
+```
+
+## Options
+
+`proxiedFetch(url, options)` accepts `node-fetch` `RequestInit` options and adds:
+
+- `proxyUrl?: string` (default: `socks5h://127.0.0.1:9050`)
+- `killTor?: boolean` (default: `true`)
+
+Example:
+
+```ts
+import { proxiedFetch } from 'fetch-tor-proxy';
+
+const response = await proxiedFetch('https://httpbin.org/anything', {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({ hello: 'world' }),
+  killTor: false,
+});
+
+console.log(await response.json());
+```
+
+## Tor Process Management
+
+The library also exports `TorProcessManager`:
+
+```ts
+import { TorProcessManager } from 'fetch-tor-proxy';
+
+const manager = new TorProcessManager({
+  bootstrapTimeoutMs: 30_000,
+});
+
+await manager.start();
+// ... your network calls ...
+manager.stop();
+```
+
+## Platform Behavior
+
+- Windows (`win32`): the library starts `tor` using `tor-expert-bundle/tor` and waits for `Bootstrapped 100%`.
+- Linux/macOS: the library does not spawn a Tor process. Tor must already be available (system service, container, etc.).
+
+## Development
+
+```bash
+pnpm build
+```
+
+The TypeScript build output is generated in the `build/` folder.
