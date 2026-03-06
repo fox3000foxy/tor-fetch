@@ -11,6 +11,7 @@ export declare class TorProcessManager {
     private torProcess;
     private isReady;
     private startupPromise;
+    private readonly isWindows;
     constructor(options?: TorProcessManagerOptions);
     start(): Promise<void>;
     stop(): void;

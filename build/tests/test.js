@@ -10,7 +10,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const __1 = require("..");
 async function func() {
-    const response = await (0, __1.proxiedFetch)("https://api.ipify.org?format=json");
+    const response = await (0, __1.proxiedFetch)("https://api.ipify.org?format=json", { killTor: false });
     const data = await response.text();
     console.log("Your IP address is:", data);
 }

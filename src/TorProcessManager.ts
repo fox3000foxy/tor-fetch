@@ -16,6 +16,7 @@ export class TorProcessManager {
     private torProcess: ChildProcess | null = null;
     private isReady = false;
     private startupPromise: Promise<void> | null = null;
+    private readonly isWindows = process.platform === 'win32';
 
     constructor(options?: TorProcessManagerOptions) {
         this.torBinaryPath = options?.torBinaryPath ?? path.join(__dirname, '..', 'tor-expert-bundle', 'tor');
@@ -24,6 +25,12 @@ export class TorProcessManager {
     }
 
     async start(): Promise<void> {
+        if (!this.isWindows) {
+            // On Linux/macOS, assume Tor is managed externally (service/container/etc.).
+            this.isReady = true;
+            return;
+        }
+
         if (this.isReady) {
             return;
         }
@@ -92,6 +99,10 @@ export class TorProcessManager {
     }
 
     stop(): void {
+        if (!this.isWindows) {
+            return;
+        }
+
         if (!this.torProcess) {
             this.resetState();
             return;

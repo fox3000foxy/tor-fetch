@@ -5,6 +5,5 @@ export interface ProxiedFetchOptions extends RequestInit {
     proxyUrl?: string;
 }
 export declare function proxiedFetch(url: string, options?: ProxiedFetchOptions): Promise<Response>;
-export { TorProcessManager };
-export { proxiedFetch as fetch };
+export { proxiedFetch as fetch, TorProcessManager };
 //# sourceMappingURL=index.d.ts.map

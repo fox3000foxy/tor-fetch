@@ -12,11 +12,17 @@ class TorProcessManager {
         this.torProcess = null;
         this.isReady = false;
         this.startupPromise = null;
+        this.isWindows = process.platform === 'win32';
         this.torBinaryPath = options?.torBinaryPath ?? path_1.default.join(__dirname, '..', 'tor-expert-bundle', 'tor');
         this.torConfigPath = options?.torConfigPath ?? path_1.default.join(__dirname, '..', 'tor-expert-bundle', 'torrc');
         this.bootstrapTimeoutMs = options?.bootstrapTimeoutMs ?? 30000;
     }
     async start() {
+        if (!this.isWindows) {
+            // On Linux/macOS, assume Tor is managed externally (service/container/etc.).
+            this.isReady = true;
+            return;
+        }
         if (this.isReady) {
             return;
         }
@@ -72,6 +78,9 @@ class TorProcessManager {
         return this.startupPromise;
     }
     stop() {
+        if (!this.isWindows) {
+            return;
+        }
         if (!this.torProcess) {
             this.resetState();
             return;
