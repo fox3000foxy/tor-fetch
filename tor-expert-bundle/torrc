@@ -1,0 +1,11 @@
+# ExitNodes {de}
+StrictNodes 1
+
+GeoIPFile .\tor-expert-bundle\geoip
+GeoIPv6File .\tor-expert-bundle\geoip6
+
+UseMicrodescriptors 1
+ClientUseIPv6 0
+
+CircuitBuildTimeout 20
+LearnCircuitBuildTimeout 0

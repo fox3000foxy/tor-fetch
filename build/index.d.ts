@@ -1,0 +1,10 @@
+import { RequestInit, Response } from 'node-fetch';
+import { TorProcessManager } from './TorProcessManager';
+export interface ProxiedFetchOptions extends RequestInit {
+    killTor?: boolean;
+    proxyUrl?: string;
+}
+export declare function proxiedFetch(url: string, options?: ProxiedFetchOptions): Promise<Response>;
+export { TorProcessManager };
+export { proxiedFetch as fetch };
+//# sourceMappingURL=index.d.ts.map
