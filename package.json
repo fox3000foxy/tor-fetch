@@ -1,6 +1,6 @@
 {
   "name": "fetch-tor-proxy",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Allows fetching resources through a proxy server, with support for authentication and custom headers.",
   "main": "build/index.js",
   "scripts": {

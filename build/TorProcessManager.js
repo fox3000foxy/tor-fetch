@@ -7,8 +7,16 @@ export class TorProcessManager {
         this.isReady = false;
         this.startupPromise = null;
         this.isWindows = process.platform === 'win32';
-        this.torBinaryPath = options?.torBinaryPath ?? path.join(__dirname, '..', 'tor-expert-bundle', 'tor');
-        this.torConfigPath = options?.torConfigPath ?? path.join(__dirname, '..', 'tor-expert-bundle', 'torrc');
+        // __dirname is not available when this file is executed as an ES module, so compute
+        // a replacement using import.meta.url.  TypeScript will transpile this without
+        // rewriting to a CJS __dirname, and the resulting build will work in both module
+        // types (the computed value is identical on CommonJS).  We intentionally use a
+        // local variable so we don't accidentally shadow a pre-existing __dirname if the
+        // file is ever used in a CJS context.
+        const thisDirPath = path.dirname(new URL(import.meta.url).pathname);
+        const thisDir = process.platform === 'win32' && thisDirPath.startsWith('/') ? thisDirPath.slice(1) : thisDirPath;
+        this.torBinaryPath = options?.torBinaryPath ?? path.join(thisDir, '..', 'tor-expert-bundle', 'tor');
+        this.torConfigPath = options?.torConfigPath ?? path.join(thisDir, '..', 'tor-expert-bundle', 'torrc');
         this.bootstrapTimeoutMs = options?.bootstrapTimeoutMs ?? 30000;
     }
     async start() {
