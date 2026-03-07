@@ -1,4 +1,3 @@
-"use strict";
 // proxiedFetch("https://api.ipify.org?format=json")
 // .then((response) => response.json() as Promise<{ ip: string }>)
 // .then((data: { ip: string }) => {
@@ -7,10 +6,9 @@
 // .catch((error) => {
 //     console.error("Error fetching IP address:", error);
 // });
-Object.defineProperty(exports, "__esModule", { value: true });
-const __1 = require("..");
+import { proxiedFetch } from "..";
 async function func() {
-    const response = await (0, __1.proxiedFetch)("https://api.ipify.org?format=json", { killTor: false });
+    const response = await proxiedFetch("https://api.ipify.org?format=json", { killTor: false });
     const data = await response.text();
     console.log("Your IP address is:", data);
 }

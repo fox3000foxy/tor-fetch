@@ -1,20 +1,14 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TorProcessManager = void 0;
-const child_process_1 = require("child_process");
-const path_1 = __importDefault(require("path"));
-const socks_proxy_agent_1 = require("socks-proxy-agent");
-class TorProcessManager {
+import { spawn } from 'child_process';
+import path from 'path';
+import { SocksProxyAgent } from 'socks-proxy-agent';
+export class TorProcessManager {
     constructor(options) {
         this.torProcess = null;
         this.isReady = false;
         this.startupPromise = null;
         this.isWindows = process.platform === 'win32';
-        this.torBinaryPath = options?.torBinaryPath ?? path_1.default.join(__dirname, '..', 'tor-expert-bundle', 'tor');
-        this.torConfigPath = options?.torConfigPath ?? path_1.default.join(__dirname, '..', 'tor-expert-bundle', 'torrc');
+        this.torBinaryPath = options?.torBinaryPath ?? path.join(__dirname, '..', 'tor-expert-bundle', 'tor');
+        this.torConfigPath = options?.torConfigPath ?? path.join(__dirname, '..', 'tor-expert-bundle', 'torrc');
         this.bootstrapTimeoutMs = options?.bootstrapTimeoutMs ?? 30000;
     }
     async start() {
@@ -30,7 +24,7 @@ class TorProcessManager {
             return this.startupPromise;
         }
         this.startupPromise = new Promise((resolve, reject) => {
-            const torProcess = (0, child_process_1.spawn)(this.torBinaryPath, ['-f', this.torConfigPath]);
+            const torProcess = spawn(this.torBinaryPath, ['-f', this.torConfigPath]);
             this.torProcess = torProcess;
             let settled = false;
             let timeout;
@@ -91,12 +85,11 @@ class TorProcessManager {
         this.resetState();
     }
     createAgent(proxyUrl) {
-        return new socks_proxy_agent_1.SocksProxyAgent(proxyUrl);
+        return new SocksProxyAgent(proxyUrl);
     }
     resetState() {
         this.torProcess = null;
         this.isReady = false;
     }
 }
-exports.TorProcessManager = TorProcessManager;
 //# sourceMappingURL=TorProcessManager.js.map

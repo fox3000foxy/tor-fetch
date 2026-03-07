@@ -1,6 +1,6 @@
 import originalFetch, { RequestInit, Response } from 'node-fetch';
 
-import { TorProcessManager } from './TorProcessManager';
+import { TorProcessManager } from './TorProcessManager.js';
 
 export interface ProxiedFetchOptions extends RequestInit {
     killTor?: boolean;
